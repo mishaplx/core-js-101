@@ -1,3 +1,5 @@
+/* eslint-disable no-cond-assign */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-vars */
 /* *************************************************************************************************
  *                                                                                                *
@@ -286,8 +288,16 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  let sum = 0;
+  let even = false;
+  String(ccn).split('').reverse().forEach((dstr) => {
+    // eslint-disable-next-line no-undef
+    // eslint-disable-next-line radix
+    const d = parseInt(dstr);
+    sum += ((even = !even) ? d : (d < 5) ? d * 2 : (d - 5) * 2 + 1);
+  });
+  return (sum % 10 === 0);
 }
 
 /**
