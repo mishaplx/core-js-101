@@ -571,6 +571,7 @@ function selectMany(/* arr, childrenSelector */) {
   //const res = arr.flat(Infinity);
   // eslint-disable-next-line spaced-comment
   //return childrenSelector(res);
+  throw new Error('Not implemented');
 }
 
 /**
@@ -607,8 +608,12 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  const len = Math.floor(arr.length / 2);
+  const head = arr.splice(0, len);
+  const tail = arr.splice(-len);
+  const newarr = tail.concat(arr, head);
+  return newarr;
 }
 
 module.exports = {
