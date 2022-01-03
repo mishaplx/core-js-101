@@ -155,10 +155,12 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *
  */
 function isInsideCircle(circle, point) {
-  // eslint-disable-next-line no-restricted-properties
-  const d = Math.sqrt(Math.pow(circle.center.x - point.x, 2)
-  // eslint-disable-next-line no-restricted-properties
-  + Math.pow(circle.center.y - point.y, 2));
+  const d = Math.sqrt(
+    // eslint-disable-next-line no-restricted-properties
+    Math.pow(circle.center.x - point.x, 2)
+    // eslint-disable-next-line no-restricted-properties
+    + Math.pow(circle.center.y - point.y, 2),
+  );
   return d < circle.radius;
 }
 
@@ -238,8 +240,8 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 /**
@@ -254,8 +256,14 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  let revNum = 0;
+  while (num > 0) {
+    revNum = revNum * 10 + (num % 10);
+    // eslint-disable-next-line no-param-reassign
+    num = Math.floor(num / 10);
+  }
+  return revNum;
 }
 
 /**
