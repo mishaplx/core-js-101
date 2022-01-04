@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable max-len */
 /* *********************************************************************************************
  *                                                                                             *
  * Please read the following tutorial before implementing tasks:                                *
@@ -23,8 +25,8 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(f, g) {
+  return (x) => f(g(x));
 }
 
 
@@ -44,8 +46,9 @@ function getComposition(/* f, g */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  // eslint-disable-next-line no-restricted-properties
+  return (x) => Math.pow(x, exponent);
 }
 
 
@@ -63,7 +66,12 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom()      => null
  */
 function getPolynom() {
-  throw new Error('Not implemented');
+  // eslint-disable-next-line prefer-rest-params
+  const args = Array.from(arguments).reverse();
+  // eslint-disable-next-line no-restricted-properties
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line no-restricted-properties
+  return (x) => args.reduce((previous, current, index) => previous + current * Math.pow(x, index), 0);
 }
 
 
@@ -81,8 +89,13 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  let store = null;
+
+  return () => {
+    if (store == null) { store = func(); }
+    return store;
+  };
 }
 
 
@@ -101,8 +114,18 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  // eslint-disable-next-line consistent-return
+  return () => {
+    // eslint-disable-next-line no-plusplus
+    // eslint-disable-next-line no-param-reassign
+    while (attempts++ > 0) {
+      try {
+        return func();
+      // eslint-disable-next-line no-empty
+      } catch (e) { }
+    }
+  };
 }
 
 
@@ -129,8 +152,22 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  // eslint-disable-next-line func-names
+  return function () {
+    // eslint-disable-next-line prefer-rest-params
+    const args = Array.from(arguments);
+    let callString = JSON.stringify(args);
+
+    callString = callString.substr(1, callString.length - 2);
+    callString = `${func.name}(${callString})`;
+
+    logFunc(`${callString} starts`);
+    // eslint-disable-next-line prefer-spread
+    const result = func.apply(null, args);
+    logFunc(`${callString} ends`);
+    return result;
+  };
 }
 
 
@@ -147,8 +184,19 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn) {
+  // eslint-disable-next-line prefer-rest-params
+  let args = Array.from(arguments);
+  args.splice(0, 1);
+
+  // eslint-disable-next-line func-names
+  return function () {
+    // eslint-disable-next-line prefer-rest-params
+    args = args.concat(Array.from(arguments));
+
+    // eslint-disable-next-line prefer-spread
+    return fn.apply(null, args);
+  };
 }
 
 
@@ -169,8 +217,9 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  // eslint-disable-next-line no-param-reassign
+  return () => startFrom++;
 }
 
 
