@@ -209,9 +209,10 @@ function getTail(arr, n) {
  *    +'20,21,22,23,24\n'
  *    +'30,31,32,33,34'
  */
-function toCsvText(/* arr */) {
-  // return arr.map((el) => `-${el.join(',')} \n`).join('');
-  throw new Error('Not implemented');
+function toCsvText(arr) {
+  const ar = arr.map((el) => `${el.join(',')}\n`);
+  const res = ar.join('');
+  return res.slice(0, res.length - 1);
 }
 
 /**
@@ -341,8 +342,21 @@ function getPositivesCount(arr) {
  *   [ 'nine','eight','nine','eight'] => [ 'eight','eight','nine','nine']
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const items = {
+    zero: 0,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+  };
+
+  return arr.sort((a, b) => items[a] - items[b]);
 }
 
 /**
@@ -443,8 +457,12 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    const compareCountry = a.country.localeCompare(b.country);
+
+    if (compareCountry !== 0) { return compareCountry; } return a.city.localeCompare(b.city);
+  });
 }
 
 /**
@@ -549,8 +567,18 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  return array.reduce((previous, current) => {
+    const key = keySelector(current);
+    const value = valueSelector(current);
+
+    const arr = previous.get(key) || [];
+    arr.push(value);
+
+    previous.set(key, arr);
+
+    return previous;
+  }, new Map());
 }
 
 /**
@@ -566,12 +594,8 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  // eslint-disable-next-line spaced-comment
-  //const res = arr.flat(Infinity);
-  // eslint-disable-next-line spaced-comment
-  //return childrenSelector(res);
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.reduce((previous, current) => previous.concat(childrenSelector(current)), []);
 }
 
 /**
@@ -586,8 +610,11 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  return indexes.reduce((previous, current, index) => {
+    if (index !== indexes.length - 1) { arr = arr[current]; } else return arr[current];
+    return null;
+  }, null);
 }
 
 /**

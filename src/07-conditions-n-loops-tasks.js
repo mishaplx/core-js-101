@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 /* eslint-disable no-cond-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-vars */
@@ -126,8 +127,20 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  if (rect1.top > rect2.top || rect1.left > rect2.left) {
+    const tmp = rect1;
+    // eslint-disable-next-line no-param-reassign
+    rect1 = rect2;
+    // eslint-disable-next-line no-param-reassign
+    rect2 = tmp;
+  }
+  return (
+    rect1.top <= rect2.top
+    && rect1.top + rect1.width >= rect2.top
+    && rect1.left <= rect2.left
+    && rect1.left + rect1.height >= rect2.left
+  );
 }
 
 /**
@@ -160,8 +173,8 @@ function isInsideCircle(circle, point) {
   const d = Math.sqrt(
     // eslint-disable-next-line no-restricted-properties
     Math.pow(circle.center.x - point.x, 2)
-    // eslint-disable-next-line no-restricted-properties
-    + Math.pow(circle.center.y - point.y, 2),
+      // eslint-disable-next-line no-restricted-properties
+      + Math.pow(circle.center.y - point.y, 2),
   );
   return d < circle.radius;
 }
@@ -291,13 +304,16 @@ function reverseInteger(num) {
 function isCreditCardNumber(ccn) {
   let sum = 0;
   let even = false;
-  String(ccn).split('').reverse().forEach((dstr) => {
-    // eslint-disable-next-line no-undef
-    // eslint-disable-next-line radix
-    const d = parseInt(dstr);
-    sum += ((even = !even) ? d : (d < 5) ? d * 2 : (d - 5) * 2 + 1);
-  });
-  return (sum % 10 === 0);
+  String(ccn)
+    .split('')
+    .reverse()
+    .forEach((dstr) => {
+      // eslint-disable-next-line no-undef
+      // eslint-disable-next-line radix
+      const d = parseInt(dstr);
+      sum += (even = !even) ? d : d < 5 ? d * 2 : (d - 5) * 2 + 1;
+    });
+  return sum % 10 === 0;
 }
 
 /**
@@ -314,8 +330,22 @@ function isCreditCardNumber(ccn) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  const sum = (dig) => {
+    const arr = String(dig).split('');
+    let result = 0;
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < arr.length; i++) {
+      result += parseInt(arr[i], 10);
+    }
+    return result;
+  };
+  // eslint-disable-next-line no-param-reassign
+  while (num > 10) {
+    // eslint-disable-next-line no-param-reassign
+    num = sum(num);
+  }
+  return num;
 }
 
 /**
@@ -339,8 +369,31 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const stack = [];
+  const openBrackets = ['[', '{', '(', '<'];
+  const closeBrackets = [']', '}', ')', '>'];
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < str.length; i++) {
+    const currentBracket = str[i];
+
+    if (openBrackets.indexOf(currentBracket) !== -1) {
+      stack.push(currentBracket);
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const topBracket = stack.pop();
+    // eslint-disable-next-line max-len
+    if (
+      openBrackets.indexOf(topBracket) !== closeBrackets.indexOf(currentBracket)
+    ) {
+      return false;
+    }
+  }
+
+  return stack.length === 0;
 }
 
 /**
@@ -363,8 +416,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 /**
@@ -379,8 +432,33 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let current = 0;
+  let breakPoint = 0;
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    let isSame = true;
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < pathes.length; i++) {
+      if (pathes[0][current] !== pathes[i][current]) {
+        isSame = false;
+      }
+    }
+
+    if (isSame) {
+      if (pathes[0][current] === '/') {
+        breakPoint = current + 1;
+      }
+      // eslint-disable-next-line no-plusplus
+      current++;
+    } else {
+      break;
+    }
+  }
+
+  return pathes[0].slice(0, breakPoint);
 }
 
 /**
@@ -401,8 +479,25 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  let result = Array.from({ length: m1.length }, () => []);
+
+  result = result.map(() => Array.from({ length: m2[0].length }, () => 0));
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < m1.length; i++) {
+    // eslint-disable-next-line no-plusplus
+    for (let j = 0; j < m2[0].length; j++) {
+      let sum = 0;
+
+      // eslint-disable-next-line no-plusplus
+      for (let f = 0; f < m1[0].length; f++) sum += m1[i][f] * m2[f][j];
+
+      result[i][j] = sum;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -435,8 +530,37 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < 3; i++) {
+    let winX = true;
+    let winY = true;
+
+    // eslint-disable-next-line no-plusplus
+    for (let j = 0; j < 3; j++) {
+      if (position[j][i] !== position[0][i]) winX = false;
+
+      if (position[i][j] !== position[i][0]) winY = false;
+    }
+
+    if (winX && position[0][i] !== undefined) return position[0][i];
+
+    if (winY && position[i][0] !== undefined) return position[i][0];
+  }
+
+  if (
+    position[0][0] === position[1][1]
+    && position[0][0] === position[2][2]
+    && position[1][1] !== undefined
+  ) { return position[1][1]; }
+
+  if (
+    position[0][2] === position[1][1]
+    && position[0][2] === position[2][0]
+    && position[1][1] !== undefined
+  ) { return position[1][1]; }
+
+  return undefined;
 }
 
 module.exports = {
